@@ -11,7 +11,83 @@
   {
     "id": 2,
     "table": 3,
-    "items": ["Pizza lixo"],
+    "items": [
+      "Pizza lixo"
+    ],
+    "status": "pending"
+  },
+  {
+    "id": 3,
+    "table": 4,
+    "items": [
+      "Pizza Margherita",
+      "Coca-Cola"
+    ],
+    "status": "pending"
+  },
+  {
+    "id": 4,
+    "table": 34,
+    "items": [
+      "sushi"
+    ],
+    "status": "pending"
+  },
+  {
+    "id": 5,
+    "table": 28,
+    "items": [
+      "Sushi",
+      "Kebab"
+    ],
+    "status": "pending"
+  },
+  {
+    "id": 6,
+    "table": 9,
+    "items": [
+      "Garlic Bread"
+    ],
+    "status": "pending"
+  },
+  {
+    "id": 7,
+    "table": 5,
+    "items": [
+      "pao"
+    ],
+    "status": "pending"
+  },
+  {
+    "id": 8,
+    "table": 6,
+    "items": [
+      "agua"
+    ],
+    "status": "pending"
+  },
+  {
+    "id": 9,
+    "table": 6,
+    "items": [
+      "mais agua"
+    ],
+    "status": "pending"
+  },
+  {
+    "id": 10,
+    "table": 6,
+    "items": [
+      "ainda mais agua"
+    ],
+    "status": "pending"
+  },
+  {
+    "id": 11,
+    "table": 5,
+    "items": [
+      "mais pao"
+    ],
     "status": "pending"
   }
 ]

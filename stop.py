@@ -12,7 +12,7 @@ def stop_service(script_name):
             if cmdline and any(script_name in part for part in cmdline):
                 print(f"Stopping {script_name} with PID {proc.info['pid']}")
                 proc.terminate()  # Try to terminate the process
-                proc.wait(timeout=2)  # Wait for the process to terminate
+                proc.wait(timeout=1)  # Wait for the process to terminate
         except psutil.TimeoutExpired:
             print(f"Force killing {script_name} with PID {proc.info['pid']}")
             proc.kill()  # Force kill if it doesn't terminate in time

@@ -13,6 +13,21 @@
   </header>
 
   <main class="grid">
+
+    <section class="card" id="create-order">
+      <h2>📝 Create Order</h2>
+      <form id="order-form">
+        <label for="table">Table Number:</label>
+        <input type="number" id="table" name="table" required>
+        
+        <label for="items">Items (comma-separated):</label>
+        <input type="text" id="items" name="items" required>
+        
+        <button type="submit">Create Order</button>
+      </form>
+      <p id="order-message"></p>
+    </section>
+
     <section class="card" id="orders">
       <h2>🧾 Orders</h2>
       <ul id="orders-list">
@@ -33,6 +48,7 @@
         <li>Loading...</li>
       </ul>
     </section>
+
   </main>
 
   <footer>
@@ -89,6 +105,49 @@
       body.classList.toggle("dark-mode");
       const isDarkMode = body.classList.contains("dark-mode");
       themeToggle.textContent = isDarkMode ? "☀️" : "🌙";
+    });
+
+    // Handle order creation
+    const orderForm = document.getElementById("order-form");
+    const orderMessage = document.getElementById("order-message");
+
+    orderForm.addEventListener("submit", async (event) => {
+      event.preventDefault(); // Prevent form from refreshing the page
+
+      const table = document.getElementById("table").value;
+      const items = document.getElementById("items").value.split(",").map(item => item.trim());
+
+      const orderData = {
+        table: parseInt(table, 10),
+        items: items
+      };
+
+      try {
+        const response = await fetch("http://localhost:5000/orders", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(orderData)
+        });
+
+        if (response.ok) {
+          const newOrder = await response.json();
+          orderMessage.textContent = `Order #${newOrder.order.id} created successfully!`;
+          orderMessage.style.color = "green";
+          loadAll(); // Refresh the orders list
+        } else {
+          orderMessage.textContent = "Failed to create order.";
+          orderMessage.style.color = "red";
+        }
+      } catch (error) {
+        console.error("Error creating order:", error);
+        orderMessage.textContent = "Error creating order.";
+        orderMessage.style.color = "red";
+      }
+
+      // Clear the form
+      orderForm.reset();
     });
   </script>
 </body>

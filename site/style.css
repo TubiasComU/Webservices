@@ -55,6 +55,13 @@
     background-color: #1e1e1e;
     color: #f9f9f9;
   }
+
+  /* Dark Mode Styles for Input Fields */
+  body.dark-mode #order-form input {
+    background-color: #333;
+    color: #f9f9f9;
+    border: 1px solid #555;
+  }
   
   /* Base Styles */
   body {
@@ -115,4 +122,43 @@
   .card ul li {
     padding: 0.5rem 0;
     border-bottom: 1px solid #eee;
+  }
+
+  /* Order Form */
+  #order-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start; 
+    justify-content: flex-start; 
+    text-align: left; 
+  }
+
+  #order-form label {
+    font-weight: bold;
+  }
+
+  #order-form input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  #order-form button {
+    padding: 0.5rem 1rem;
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  #order-form button:hover {
+    background-color: #e55a5a;
+  }
+
+  #order-message {
+    margin-top: 1rem;
+    font-weight: bold;
   }
