@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 import json
 import os
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 KITCHEN_FILE = 'kitchen/kitchen_orders.json'
 kitchen_queue = []

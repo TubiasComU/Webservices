@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, request
 import requests
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # Microservices URLs
 ORDERS_URL = "http://localhost:5001/orders"
