@@ -14,25 +14,22 @@
   <main class="grid">
     <section class="card" id="orders">
       <h2>🧾 Orders</h2>
-      <ul>
-        <li>Order #101 - Table 5 - 2x Burger, 1x Soda</li>
-        <li>Order #102 - Table 3 - 1x Pasta, 1x Wine</li>
+      <ul id="orders-list">
+        <li>Loading...</li>
       </ul>
     </section>
 
     <section class="card" id="kitchen">
       <h2>👨‍🍳 Kitchen</h2>
-      <ul>
-        <li>Order #101 - Preparing...</li>
-        <li>Order #102 - Waiting...</li>
+      <ul id="kitchen-list">
+        <li>Loading...</li>
       </ul>
     </section>
 
     <section class="card" id="payments">
       <h2>💳 Payments</h2>
-      <ul>
-        <li>Order #100 - Paid ✅</li>
-        <li>Order #101 - Pending 💰</li>
+      <ul id="payments-list">
+        <li>Loading...</li>
       </ul>
     </section>
   </main>
@@ -40,5 +37,46 @@
   <footer>
     <p>&copy; 2025 Restaurant Management System</p>
   </footer>
+
+  <script>
+    async function fetchData(endpoint, listId, formatter) {
+      try {
+        const response = await fetch(endpoint);
+        const data = await response.json();
+        const list = document.getElementById(listId);
+        list.innerHTML = ""; // Clear previous content
+
+        data.forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = formatter(item);
+          list.appendChild(li);
+        });
+
+      } catch (error) {
+        console.error("Error getting data", error);
+        document.getElementById(listId).innerHTML = "<li>Error loading data</li>";
+      }
+    }
+
+    function loadAll() {
+      fetchData("/api/orders", "orders-list", item =>
+        `Order #${item.id} - Table ${item.table} - ${item.items.join(", ")}`
+      );
+
+      fetchData("/api/kitchen", "kitchen-list", item =>
+        `Order #${item.orderId} - ${item.status}`
+      );
+
+      fetchData("/api/payments", "payments-list", item =>
+        `Order #${item.orderId} - ${item.status === "paid" ? "Paid ✅" : "Pending 💰"}`
+      );
+    }
+
+    // Load initial data
+    loadAll();
+
+    // Regularly refresh data every 10 seconds
+    setInterval(loadAll, 10000);
+  </script>
 </body>
 </html>
