@@ -59,17 +59,19 @@
     }
 
     function loadAll() {
-      fetchData("/api/orders", "orders-list", item =>
+      fetchData("http://localhost:5000/orders", "orders-list", item =>
         `Order #${item.id} - Table ${item.table} - ${item.items.join(", ")}`
       );
 
-      fetchData("/api/kitchen", "kitchen-list", item =>
+      fetchData("http://localhost:5000/kitchen", "kitchen-list", item =>
         `Order #${item.orderId} - ${item.status}`
       );
 
-      fetchData("/api/payments", "payments-list", item =>
+      fetchData("http://localhost:5000/payments", "payments-list", item =>
         `Order #${item.orderId} - ${item.status === "paid" ? "Paid ✅" : "Pending 💰"}`
       );
+
+      
     }
 
     // Load initial data

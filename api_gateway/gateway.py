@@ -15,7 +15,7 @@ def home():
     return "API Gateway for a Restaurant"
 
 # Route to create an order (POST for microservice Orders)
-@app.route('/orders', methods=['POST'])
+@app.route('/orders', methods=['POST' , 'GET'])
 def create_order():
     order_data = request.json
     response = requests.post(ORDERS_URL, json=order_data)
@@ -33,7 +33,7 @@ def create_order():
     return jsonify({"error": "Failed to create order"}), 400
 
 # Route to send order to kitchen (POST for microservice Kitchen)
-@app.route('/kitchen', methods=['POST'])
+@app.route('/kitchen', methods=['POST' , 'GET'])
 def send_to_kitchen():
     kitchen_data = request.json
     response = requests.post(KITCHEN_URL, json=kitchen_data)
@@ -42,7 +42,7 @@ def send_to_kitchen():
     return jsonify({"error": "Failed to send to kitchen"}), 400
 
 # Route to process the payment (POST for microservice Payments)
-@app.route('/payments', methods=['POST'])
+@app.route('/payments', methods=['POST' , 'GET'])
 def process_payment():
     payment_data = request.json
     response = requests.post(PAYMENTS_URL, json=payment_data)
