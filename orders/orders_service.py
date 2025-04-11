@@ -8,6 +8,7 @@ orders = []
 @app.route('/orders', methods=['POST'])
 def create_order():
     data = request.json
+    print(f"[Orders] New order received: {data}")
     order_id = len(orders) + 1
     order = {
         'id': order_id,
