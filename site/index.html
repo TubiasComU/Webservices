@@ -9,6 +9,7 @@
 <body>
   <header>
     <h1>🍽️ Restaurant Dashboard</h1>
+    <button id="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
   </header>
 
   <main class="grid">
@@ -79,6 +80,16 @@
 
     // Regularly refresh data every 10 seconds
     setInterval(loadAll, 10000);
+
+    // Dark Mode Toggle
+    const themeToggle = document.getElementById("theme-toggle");
+    const body = document.body;
+
+    themeToggle.addEventListener("click", () => {
+      body.classList.toggle("dark-mode");
+      const isDarkMode = body.classList.contains("dark-mode");
+      themeToggle.textContent = isDarkMode ? "☀️" : "🌙";
+    });
   </script>
 </body>
 </html>
