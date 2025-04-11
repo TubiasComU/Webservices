@@ -45,7 +45,21 @@ def process_payment():
     payment_data = request.json
     response = requests.post(PAYMENTS_URL, json=payment_data)
     if response.status_code == 200:
-        return jsonify({"message": "Payment processed successfully!"}), 200
+        order_id = payment_data.get("order_id")
+
+        # Update order status to paid
+        update_url = f"{ORDERS_URL}/{order_id}"
+        update_response = requests.patch(update_url, json={"status": "paid"})
+
+        if update_response.status_code == 200:
+            return jsonify({
+                "message": "Payment processed and order marked as paid!"
+            }), 200
+        else:
+            return jsonify({
+                "message": "Payment processed, but failed to update order status."
+            }), 207  # Multi-Status (207) indicates partial success
+
     return jsonify({"error": "Payment processing failed"}), 400
 
 if __name__ == '__main__':
