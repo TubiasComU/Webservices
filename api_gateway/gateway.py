@@ -10,7 +10,7 @@ PAYMENTS_URL = "http://localhost:5003/payments"
 
 @app.route('/')
 def home():
-    return "API Gateway para Gestão de Restaurante!"
+    return "API Gateway for a Restaurant"
 
 # Route to create an order (POST for microservice Orders)
 @app.route('/orders', methods=['POST'])
@@ -22,7 +22,11 @@ def create_order():
         order_response_data = response.json()
         kitchen_response = requests.post(KITCHEN_URL, json=order_response_data)
         if kitchen_response.status_code == 200:
-            return jsonify({"message": "Order created"}), 200
+            return jsonify({
+            "message": "Order created and sent to kitchen",
+            "order": order_response_data
+        }), 200
+
     
     return jsonify({"error": "Failed to create order"}), 400
 
@@ -45,4 +49,4 @@ def process_payment():
     return jsonify({"error": "Payment processing failed"}), 400
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)  # Porta 5000 para o Gateway
+    app.run(debug=True, port=5000)  # Port for the API Gateway
