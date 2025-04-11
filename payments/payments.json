@@ -1,7 +1,8 @@
 [
   {
-    "order_id": 1,
+    "id": 1,
     "amount": 20.5,
-    "status": "paid"
+    "status": "pending",
+    "paid": 0
   }
 ]

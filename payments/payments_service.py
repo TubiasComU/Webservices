@@ -24,20 +24,19 @@ def save_payments():
 @app.route('/payments', methods=['POST'])
 def process_payment():
     data = request.json
-    order_id = data.get('order_id')
+    id = data.get('id')
     amount = data.get('amount')
 
-    if not order_id or not amount:
-        return jsonify({'error': 'Missing order_id or amount'}), 400
+    if not id or not amount:
+        return jsonify({'error': 'Missing id or amount'}), 400
 
     payment = {
-        'order_id': order_id,
+        'id': id,
         'amount': amount,
         'status': 'paid'
     }
     payments.append(payment)
     save_payments()
-    print(f"[Payments] Pagamento registado: {payment}")
     return jsonify({'message': 'Payment successful'}), 200
 
 @app.route('/payments', methods=['GET'])

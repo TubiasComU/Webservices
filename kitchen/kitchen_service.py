@@ -1,6 +1,9 @@
 from flask import Flask, request, jsonify
 import json
 import os
+import threading
+import time
+import random
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -34,13 +37,26 @@ def receive_order():
     }
     kitchen_queue.append(order)
     save_kitchen_orders()
-    print(f"[Kitchen] Pedido {order_id} adicionado à fila")
     return jsonify({'message': f'Order {order_id} is being prepared'}), 200
 
 @app.route('/kitchen', methods=['GET'])
 def get_kitchen_orders():
     return jsonify(kitchen_queue), 200
 
+# Background thread to update order status
+def process_orders():
+    while True:
+        for order in kitchen_queue:
+            if order['status'] == 'preparing':
+                # Wait for a random time between 5 and 15 seconds
+                time.sleep(random.randint(5, 60))
+                order['status'] = 'completed'
+                print(f"Order {order['id']} is now completed.")
+                save_kitchen_orders()
+        time.sleep(1)  # Check the queue every second
+
 if __name__ == '__main__':
     load_kitchen_orders()
+    # Start the background thread
+    threading.Thread(target=process_orders, daemon=True).start()
     app.run(debug=True, port=5002)

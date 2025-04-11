@@ -30,13 +30,13 @@ def create_order():
     data = request.json
     order = {
         "id": next_id,
+        "table": data.get("table"),
         "items": data.get("items", []),
         "status": "pending"
     }
     orders.append(order)
     next_id += 1
     save_orders()
-    print(f"[Orders] Nova ordem criada: {order}")
     return jsonify(order), 201
 
 @app.route('/orders', methods=['GET'])
@@ -50,7 +50,6 @@ def update_order_status(order_id):
         if order["id"] == order_id:
             order["status"] = data.get("status", order["status"])
             save_orders()
-            print(f"[Orders] Ordem {order_id} atualizada para: {order['status']}")
             return jsonify(order), 200
     return jsonify({"error": "Order not found"}), 404
 
