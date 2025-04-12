@@ -33,7 +33,7 @@ def receive_order():
 
     order = {
         'id': order_id,
-        'status': 'preparing'
+        'status': 'Preparing'
     }
     kitchen_queue.append(order)
     save_kitchen_orders()
@@ -47,10 +47,10 @@ def get_kitchen_orders():
 def process_orders():
     while True:
         for order in kitchen_queue:
-            if order['status'] == 'preparing':
+            if order['status'] == 'Preparing':
                 # Wait for a random time between 5 and 15 seconds
                 time.sleep(random.randint(5, 60))
-                order['status'] = 'completed'
+                order['status'] = 'Completed'
                 print(f"Order {order['id']} is now completed.")
                 save_kitchen_orders()
         time.sleep(1)  # Check the queue every second

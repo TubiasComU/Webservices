@@ -22,15 +22,25 @@ def create_order():
     
     if response.status_code == 201:
         order_response_data = response.json()
-        kitchen_response = requests.post(KITCHEN_URL, json=order_response_data)
-        if kitchen_response.status_code == 200:
-            return jsonify({
-            "message": "Order created and sent to kitchen",
-            "order": order_response_data
-        }), 200
 
-    
+        # Enviar para a Kitchen
+        kitchen_response = requests.post(KITCHEN_URL, json=order_response_data)
+
+        # Enviar para Payments
+        payment_data = {
+            "table": order_response_data.get("table"),
+            "status": "waiting"
+        }
+        payment_response = requests.post(PAYMENTS_URL, json=payment_data)
+
+        if kitchen_response.status_code == 200 and payment_response.status_code == 200:
+            return jsonify({
+                "message": "Order created, sent to kitchen and payment entry registered",
+                "order": order_response_data
+            }), 200
+
     return jsonify({"error": "Failed to create order"}), 400
+
 
 # Route to send order to kitchen (POST for microservice Kitchen)
 @app.route('/kitchen', methods=['POST'])

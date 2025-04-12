@@ -1,8 +1,7 @@
 [
   {
-    "id": 1,
-    "amount": 20.5,
-    "status": "pending",
-    "paid": 0
+    "table": 1,
+    "amount": 0,
+    "status": "waiting"
   }
 ]

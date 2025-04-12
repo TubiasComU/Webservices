@@ -24,6 +24,24 @@ def save_payments():
 @app.route('/payments', methods=['POST'])
 def process_payment():
     data = request.json
+
+    # if 'table' in data and data.get('status') == 'waiting':
+    if 'table' in data and data.get('status') == 'waiting':
+        table_number = data['table']
+        
+        # Verifies if the table number already exists in the payments list
+        if any(p.get('table') == table_number for p in payments):
+            return jsonify({'message': f'Payment entry for table {table_number} already exists'}), 200
+
+        payment = {
+            'table': table_number,
+            'amount': 0,
+            'status': 'waiting'
+        }
+        payments.append(payment)
+        save_payments()
+        return jsonify({'message': 'Payment entry created'}), 200
+
     id = data.get('id')
     amount = data.get('amount')
 
