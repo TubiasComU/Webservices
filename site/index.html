@@ -65,13 +65,45 @@
 
         data.forEach(item => {
           const li = document.createElement("li");
-          li.textContent = formatter(item);
+          li.innerHTML = formatter(item);
+
+          // Add "Pay" button for pending payments
+          if (listId === "payments-list" && item.paid === 0) {
+            const payButton = document.createElement("button");
+            payButton.textContent = "💳 Pay";
+            payButton.classList.add("pay-button");
+            payButton.addEventListener("click", () => payPayment(item.table));
+            li.appendChild(payButton);
+          }
+
           list.appendChild(li);
         });
 
       } catch (error) {
         console.error("Error getting data", error);
         document.getElementById(listId).innerHTML = "<li>Error loading data</li>";
+      }
+    }
+
+    async function payPayment(table) {
+      try {
+        const response = await fetch(`http://localhost:5003/payments/${table}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ paid: 1 })
+        });
+
+        if (response.ok) {
+          alert(`Payment for Table #${table} marked as Paid!`);
+          loadAll(); // Refresh the payments list
+        } else {
+          alert("Failed to mark payment as Paid.");
+        }
+      } catch (error) {
+        console.error("Error updating payment:", error);
+        alert("Error updating payment.");
       }
     }
 

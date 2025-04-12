@@ -25,8 +25,7 @@ def save_payments():
 def process_payment():
     data = request.json
 
-    # if 'table' in data and data.get('status') == 'waiting':
-    if 'table' in data and data.get('status') == 'waiting':
+    if 'table' in data:
         table_number = data['table']
         
         # Verifies if the table number already exists in the payments list
@@ -35,31 +34,27 @@ def process_payment():
 
         payment = {
             'table': table_number,
-            'amount': 0,
-            'status': 'waiting'
+            'paid': 0  # Default to unpaid
         }
         payments.append(payment)
         save_payments()
         return jsonify({'message': 'Payment entry created'}), 200
 
-    id = data.get('id')
-    amount = data.get('amount')
-
-    if not id or not amount:
-        return jsonify({'error': 'Missing id or amount'}), 400
-
-    payment = {
-        'id': id,
-        'amount': amount,
-        'status': 'paid'
-    }
-    payments.append(payment)
-    save_payments()
-    return jsonify({'message': 'Payment successful'}), 200
+    return jsonify({'error': 'Missing table field'}), 400
 
 @app.route('/payments', methods=['GET'])
 def get_payments():
     return jsonify(payments), 200
+
+@app.route('/payments/<int:table>', methods=['PATCH'])
+def update_payment(table):
+    data = request.json
+    for payment in payments:
+        if payment["table"] == table:
+            payment["paid"] = data.get("paid", payment["paid"])
+            save_payments()
+            return jsonify(payment), 200
+    return jsonify({"error": "Payment not found"}), 404
 
 if __name__ == '__main__':
     load_payments()
