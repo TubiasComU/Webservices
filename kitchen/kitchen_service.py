@@ -33,6 +33,7 @@ def receive_order():
 
     order = {
         'id': order_id,
+        'table': data.get('table'),
         'status': 'Preparing'
     }
     kitchen_queue.append(order)

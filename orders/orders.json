@@ -3,7 +3,7 @@
     "id": 1,
     "table": 1,
     "items": [
-      "Pizza"
+      "pao"
     ],
     "status": "pending"
   },
@@ -11,7 +11,15 @@
     "id": 2,
     "table": 1,
     "items": [
-      "Water"
+      "agua"
+    ],
+    "status": "pending"
+  },
+  {
+    "id": 3,
+    "table": 1,
+    "items": [
+      "agua"
     ],
     "status": "pending"
   }
