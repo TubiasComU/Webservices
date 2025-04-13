@@ -1,29 +1,14 @@
 [
   {
     "table": 1,
-    "amount": 0,
-    "status": "waiting"
+    "paid": 1
   },
   {
     "table": 2,
-    "amount": 0,
-    "status": "waiting"
+    "paid": 1
   },
   {
     "table": 3,
-    "amount": 0,
-    "status": "waiting"
-  },
-  {
-    "table": 4,
     "paid": 1
-  },
-  {
-    "table": 5,
-    "paid": 1
-  },
-  {
-    "table": 6,
-    "paid": 0
   }
 ]

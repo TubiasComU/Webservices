@@ -2,6 +2,11 @@ from flask import Flask, request, jsonify
 import json
 import os
 from flask_cors import CORS
+import requests
+
+ORDERS_URL = "http://localhost:5001/orders"
+KITCHEN_URL = "http://localhost:5002/kitchen"
+
 
 app = Flask(__name__)
 CORS(app)
@@ -53,8 +58,19 @@ def update_payment(table):
         if payment["table"] == table:
             payment["paid"] = data.get("paid", payment["paid"])
             save_payments()
+
+            if payment["paid"] == 1:
+                # Remove orders
+                try:
+                    requests.delete(f"{ORDERS_URL}/table/{table}")
+                    requests.delete(f"{KITCHEN_URL}/table/{table}")
+                except requests.exceptions.RequestException as e:
+                    print("Error deleting orders/kitchen:", e)
+
             return jsonify(payment), 200
+
     return jsonify({"error": "Payment not found"}), 404
+
 
 if __name__ == '__main__':
     load_payments()

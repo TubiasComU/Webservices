@@ -44,6 +44,13 @@ def receive_order():
 def get_kitchen_orders():
     return jsonify(kitchen_queue), 200
 
+@app.route('/kitchen/table/<int:table>', methods=['DELETE'])
+def delete_kitchen_by_table(table):
+    global kitchen_queue
+    kitchen_queue = [o for o in kitchen_queue if o["table"] != table]
+    save_kitchen_orders()
+    return jsonify({"message": f"Kitchen orders for table {table} deleted"}), 200
+
 # Background thread to update order status
 def process_orders():
     while True:

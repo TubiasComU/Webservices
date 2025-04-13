@@ -96,7 +96,6 @@
         });
 
         if (response.ok) {
-          alert(`Payment for Table #${table} marked as Paid!`);
           loadAll(); // Refresh the payments list
         } else {
           alert("Failed to mark payment as Paid.");
