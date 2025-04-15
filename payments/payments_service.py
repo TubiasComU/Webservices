@@ -3,10 +3,11 @@ import json
 import os
 from flask_cors import CORS
 import requests
+import threading
+import time
 
 ORDERS_URL = "http://localhost:5001/orders"
 KITCHEN_URL = "http://localhost:5002/kitchen"
-
 
 app = Flask(__name__)
 CORS(app)
@@ -33,13 +34,13 @@ def process_payment():
     if 'table' in data:
         table_number = data['table']
         
-        # Verifies if the table number already exists in the payments list
+        # Verifica se já existe entrada para a mesa
         if any(p.get('table') == table_number for p in payments):
             return jsonify({'message': f'Payment entry for table {table_number} already exists'}), 200
 
         payment = {
             'table': table_number,
-            'paid': 0  # Default to unpaid
+            'paid': 0
         }
         payments.append(payment)
         save_payments()
@@ -60,17 +61,27 @@ def update_payment(table):
             save_payments()
 
             if payment["paid"] == 1:
-                # Remove orders
+                # Remove from orders and kitchen microservices
                 try:
                     requests.delete(f"{ORDERS_URL}/table/{table}")
                     requests.delete(f"{KITCHEN_URL}/table/{table}")
                 except requests.exceptions.RequestException as e:
-                    print("Error deleting orders/kitchen:", e)
+                    print("❌ Error deleting orders/kitchen:", e)
+
+                # Iniciate a thread to remove the payment after 20 seconds
+                threading.Thread(target=remove_payment_after_delay, args=(table,), daemon=True).start()
 
             return jsonify(payment), 200
 
     return jsonify({"error": "Payment not found"}), 404
 
+# Remove the payment entry after 20 seconds
+def remove_payment_after_delay(table):
+    time.sleep(20)
+    global payments
+    payments = [p for p in payments if p["table"] != table]
+    save_payments()
+    print(f"✅ Payment for table {table} removed after 20 seconds")
 
 if __name__ == '__main__':
     load_payments()
