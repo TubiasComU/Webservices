@@ -62,11 +62,11 @@
         const data = await response.json();
         const list = document.getElementById(listId);
         list.innerHTML = ""; // Clear previous content
-
+  
         data.forEach(item => {
           const li = document.createElement("li");
           li.innerHTML = formatter(item);
-
+  
           // Add "Pay" button for pending payments
           if (listId === "payments-list" && item.paid === 0) {
             const payButton = document.createElement("button");
@@ -75,16 +75,16 @@
             payButton.addEventListener("click", () => payPayment(item.table));
             li.appendChild(payButton);
           }
-
+  
           list.appendChild(li);
         });
-
+  
       } catch (error) {
         console.error("Error getting data", error);
         document.getElementById(listId).innerHTML = "<li>Error loading data</li>";
       }
     }
-
+  
     async function payPayment(table) {
       try {
         const response = await fetch(`http://localhost:5003/payments/${table}`, {
@@ -94,9 +94,10 @@
           },
           body: JSON.stringify({ paid: 1 })
         });
-
+  
         if (response.ok) {
-          loadAll(); // Refresh the payments list
+          // Atualiza depois de 21s para dar tempo à lógica do backend
+          setTimeout(loadAll, 21000);
         } else {
           alert("Failed to mark payment as Paid.");
         }
@@ -105,54 +106,49 @@
         alert("Error updating payment.");
       }
     }
-
+  
     function loadAll() {
       fetchData("http://localhost:5000/orders", "orders-list", item =>
         `Order #${item.id} - Table ${item.table} - ${item.items.join(", ")}`
       );
-
+  
       fetchData("http://localhost:5000/kitchen", "kitchen-list", item =>
         `Order #${item.id} - Table ${item.table} - ${item.status}`
       );
-
+  
       fetchData("http://localhost:5000/payments", "payments-list", item =>
         `Table #${item.table} - ${item.paid === 1 ? "Paid ✅" : "Pending 💰"}`
       );
-
-      
     }
-
-    // Load initial data
+  
+    // Load everything one time only at the start
     loadAll();
-
-    // Regularly refresh data every 10 seconds
-    setInterval(loadAll, 10000);
-
+  
     // Dark Mode Toggle
     const themeToggle = document.getElementById("theme-toggle");
     const body = document.body;
-
+  
     themeToggle.addEventListener("click", () => {
       body.classList.toggle("dark-mode");
       const isDarkMode = body.classList.contains("dark-mode");
       themeToggle.textContent = isDarkMode ? "☀️" : "🌙";
     });
-
+  
     // Handle order creation
     const orderForm = document.getElementById("order-form");
     const orderMessage = document.getElementById("order-message");
-
+  
     orderForm.addEventListener("submit", async (event) => {
-      event.preventDefault(); // Prevent form from refreshing the page
-
+      event.preventDefault();
+  
       const table = document.getElementById("table").value;
       const items = document.getElementById("items").value.split(",").map(item => item.trim());
-
+  
       const orderData = {
         table: parseInt(table, 10),
         items: items
       };
-
+  
       try {
         const response = await fetch("http://localhost:5000/orders", {
           method: "POST",
@@ -161,12 +157,12 @@
           },
           body: JSON.stringify(orderData)
         });
-
+  
         if (response.ok) {
           const newOrder = await response.json();
           orderMessage.textContent = `Order #${newOrder.order.id} created successfully!`;
           orderMessage.style.color = "green";
-          loadAll(); // Refresh the orders list
+          loadAll();
         } else {
           orderMessage.textContent = "Failed to create order.";
           orderMessage.style.color = "red";
@@ -176,10 +172,9 @@
         orderMessage.textContent = "Error creating order.";
         orderMessage.style.color = "red";
       }
-
-      // Clear the form
+  
       orderForm.reset();
     });
-  </script>
+  </script>  
 </body>
 </html>
