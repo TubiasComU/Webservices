@@ -96,7 +96,7 @@
         });
   
         if (response.ok) {
-          // Atualiza depois de 21s para dar tempo à lógica do backend
+          // Refreshes after 21sec cause payments are done in 20
           setTimeout(loadAll, 21000);
         } else {
           alert("Failed to mark payment as Paid.");
