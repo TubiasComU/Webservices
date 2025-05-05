@@ -3,7 +3,6 @@ import json
 import os
 import threading
 import time
-import random
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -56,8 +55,8 @@ def process_orders():
     while True:
         for order in kitchen_queue:
             if order['status'] == 'Preparing':
-                # Wait for a random time between 5 and 15 seconds
-                time.sleep(random.randint(5, 60))
+                # Wait for 20 seconds
+                time.sleep(20)
                 order['status'] = 'Completed'
                 print(f"Order {order['id']} is now completed.")
                 save_kitchen_orders()

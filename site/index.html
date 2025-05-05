@@ -96,6 +96,7 @@
         });
   
         if (response.ok) {
+          loadAll();
           // Refreshes after 21sec cause payments are done in 20
           setTimeout(loadAll, 21000);
         } else {
@@ -163,6 +164,7 @@
           orderMessage.textContent = `Order #${newOrder.order.id} created successfully!`;
           orderMessage.style.color = "green";
           loadAll();
+          setTimeout(loadAll, 21000) // Refreshes after 21sec cause orders are done in 20
         } else {
           orderMessage.textContent = "Failed to create order.";
           orderMessage.style.color = "red";
