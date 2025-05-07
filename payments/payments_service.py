@@ -34,7 +34,7 @@ def process_payment():
     if 'table' in data:
         table_number = data['table']
         
-        # Verifica se já existe entrada para a mesa
+        # Verifies if the payment entry already exists
         if any(p.get('table') == table_number for p in payments):
             return jsonify({'message': f'Payment entry for table {table_number} already exists'}), 200
 

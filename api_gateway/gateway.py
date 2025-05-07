@@ -23,10 +23,10 @@ def create_order():
     if response.status_code == 201:
         order_response_data = response.json()
 
-        # Enviar para a Kitchen
+        # Send to Kitchen
         kitchen_response = requests.post(KITCHEN_URL, json=order_response_data)
 
-        # Enviar para Payments
+        # Send to Payments
         payment_data = {
             "table": order_response_data.get("table"),
             "status": "waiting"
