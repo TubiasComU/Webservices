@@ -36,6 +36,12 @@ All data is stored locally in `.json` files, ensuring durability between restart
    git clone https://github.com/TubiasComU/1706619_ei_sd_2024_25
    cd 1706619_ei_sd_2024_25
    
-2. Open start.py
+2. Start start.py
+   ```bash
+   python start.py
 
-3. Open 1706619_ei_sd_2024_25/site/index.html
+3. Open Website
+   ```bash
+   cd site
+   start index.html
+
